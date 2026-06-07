@@ -8,4 +8,6 @@
 #include "core/core_string.h"
 #include "core/core_file.h"
 
+#include "oop/core_oop.h"
+
 #endif
