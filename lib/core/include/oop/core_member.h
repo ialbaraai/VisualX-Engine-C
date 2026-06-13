@@ -2,6 +2,7 @@
 
 #define CORE_MEMBER_H
 
+#include "core_oop_types.h"
 #include "core_oop_visibility.h"
 
 #include "../core_backend.h"

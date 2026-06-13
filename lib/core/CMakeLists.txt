@@ -6,6 +6,10 @@ add_library(core STATIC
     src/containers/core_vector.c
     src/containers/core_map.c
     src/core/core_file.c
+    src/oop/core_member.c
+    src/oop/core_method.c
+    src/oop/core_object.c
+    src/oop/core_class.c
 )
 
 set_target_properties(core PROPERTIES C_STANDARD 99 C_STANDARD_REQUIRED ON)
