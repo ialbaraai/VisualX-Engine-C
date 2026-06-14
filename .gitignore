@@ -2,3 +2,4 @@ build/
 *.a
 *.o
 *.exe
+*.git
