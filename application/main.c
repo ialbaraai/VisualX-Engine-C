@@ -3,15 +3,13 @@
 
 int main(void)
 {
-	string_t str = {0};
-	core_string_init(&str, 64);
+	string_t name = {0};
+	core_string_init(&name, 64);
 
-	printf("To be done soon, what is your name? ");
-	core_string_input(&str);
+	printf("Still in progress! What is your name? ");
+	core_string_input(&name);
 
-	printf("Oh nice name %s! nice to meet you!\n", str.data);
+	printf("Hello %s, nice name!\n", name.data);
 
-	core_string_destroy(&str);
-
-	return 0;
+	core_string_destroy(&name);
 }

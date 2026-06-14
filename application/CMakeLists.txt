@@ -49,4 +49,5 @@ target_link_libraries(${PROJECT_NAME} PRIVATE
     Vulkan::Vulkan
     luajit
     dl
+    m
 )
