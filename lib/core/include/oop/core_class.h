@@ -18,10 +18,10 @@ typedef struct CORE_CLASS_STRUCT
     size_t static_methods_size;
 
     int (*constructor)(object_t* instance, int argc, void** argv);
-    int (*destructor)(object_t* instace);
+    void (*destructor)(object_t* instace);
 } class_t;
 
-int core_class_init(class_t* class, const class_t* base_class, const char* name, const size_t static_members_size, const size_t static_methods_size, const member_t* static_members, const method_t* static_methods);
+int core_class_init(class_t* class, const class_t* base_class, const char* name, const size_t static_members_size, const size_t static_methods_size, const member_t* static_members, const method_t* static_methods, int(*constructor)(object_t* object, int argc, void** argv), void(*destructor)(object_t* object));
 
 int core_class_call(class_t* class, const char* static_method_name, int argc, void** argv);
 

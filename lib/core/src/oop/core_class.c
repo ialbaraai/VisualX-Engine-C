@@ -6,7 +6,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-int core_class_init(class_t* class, const class_t* base_class, const char* name, const size_t static_members_size, const size_t static_methods_size, const member_t* static_members, const method_t* static_methods)
+int core_class_init(class_t* class, const class_t* base_class, const char* name, const size_t static_members_size, const size_t static_methods_size, const member_t* static_members, const method_t* static_methods, int(*constructor)(object_t* object, int argc, void** argv), void(*destructor)(object_t* object))
 {
     if (!class) return 0;
     if (class->static_members || class->static_methods) return 0;
@@ -51,6 +51,9 @@ int core_class_init(class_t* class, const class_t* base_class, const char* name,
     {
         core_method_copy_callback(&class->static_methods[i], &static_methods[i]);
     }
+
+    class->constructor = constructor;
+    class->destructor = destructor;
 
     return 1;
 }
@@ -221,7 +224,7 @@ void core_class_copy_callback(void* destination, const void* source)
         const class_t* src = (class_t*)source;
 
         class_t copy = {0};
-        if (core_class_init(&copy, src->base_class, src->name.data, src->static_members_size, src->static_methods_size, src->static_members, src->static_methods))
+        if (core_class_init(&copy, src->base_class, src->name.data, src->static_members_size, src->static_methods_size, src->static_members, src->static_methods, src->constructor, src->destructor))
         {
             memcpy(destination, &copy, sizeof(class_t));
         }

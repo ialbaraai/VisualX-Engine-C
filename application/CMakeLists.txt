@@ -29,7 +29,7 @@ set_target_properties(luajit PROPERTIES
     IMPORTED_LOCATION ${LUAJIT_DIR}/src/libluajit.a
 )
 
-find_package(glfw3 REQUIRED)
+find_package(SDL3 REQUIRED)
 find_package(Vulkan REQUIRED)
 
 target_include_directories(${PROJECT_NAME} PRIVATE
@@ -45,7 +45,7 @@ add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/../lib/core lib/core)
 
 target_link_libraries(${PROJECT_NAME} PRIVATE
     core
-    glfw
+    SDL3::SDL3
     Vulkan::Vulkan
     luajit
     dl
