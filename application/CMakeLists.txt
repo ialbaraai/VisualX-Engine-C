@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.16)
-project(engine C)
+project(engine)
 
 set(CMAKE_C_STANDARD 11)
 
@@ -41,10 +41,10 @@ target_include_directories(${PROJECT_NAME} PRIVATE
     ${CGLM_DIR}
 )
 
-add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/../lib/core lib/core)
+# add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/../lib/core lib/core)
 
 target_link_libraries(${PROJECT_NAME} PRIVATE
-    core
+    # core
     SDL3::SDL3
     Vulkan::Vulkan
     luajit
