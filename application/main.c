@@ -1,112 +1,131 @@
 #include <stdio.h>
+#include <math.h>
 #include <stdbool.h>
-#include <SDL3/SDL.h>
-#include "tinyfiledialogs.h"
+#include <core.h>
+#include <glad/gl.h>
+#include <GLFW/glfw3.h>
+
+const char* vrtxShdrSrc = "#version 330 core\n"
+                           "layout (location = 0) in vec3 aPos;\n"
+                           "void main()\n"
+                           "{\n"
+                           "    gl_Position = vec4(aPos.x, aPos.y, aPos.z, 1.0);\n"
+                           "}\n";
+const char* frgmntShdrRsc = "#version 330 core\n"
+                            "out vec4 FragColor;\n"
+                            "void main()\n"
+                            "{\n"
+                            "   FragColor = vec4(0.8f, 0.8f, 0.8f, 1.0f);\n"
+                            "}\n";
 
 int main(void)
 {
-    if (!SDL_Init(SDL_INIT_VIDEO))
+    glfwInit();
+
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+
+    GLFWwindow* window = glfwCreateWindow(800, 600, "VisualX Engine", NULL, NULL);
+
+    if (!window)
     {
-        fprintf(stderr, "SDL_Init Error: %s\n", SDL_GetError());
+        printf("glfwCreateWindow Error!\n");
+
+        glfwTerminate();
 
         return 1;
     }
 
-    SDL_Window* window = SDL_CreateWindow("Window", 800, 600, SDL_WINDOW_RESIZABLE);
+    glfwMakeContextCurrent(window);
 
-    if (!window)
+    int version = gladLoadGL(glfwGetProcAddress);
+
+    if (version == 0)
     {
-        fprintf(stderr, "SDL_CreateWindow Error: %s\n", SDL_GetError());
+        printf("gladLoadGL Error!\n");
 
-        SDL_Quit();
+        glfwDestroyWindow(window);
+        glfwTerminate();
 
         return 2;
     }
 
-    SDL_Renderer* renderer = SDL_CreateRenderer(window, NULL);
+    GLfloat vertices[] = {
+        -0.5f, -0.5f * (float)sqrt(3) / 3.0f, 0.0f,
+        0.5f, -0.5f * (float)sqrt(3) / 3.0f, 0.0f,
+        0.0f, 0.5f * (float)sqrt(3) * 2 / 3.0f, 0.0f,
+        -0.5f / 2.0f, 0.5f * (float)sqrt(3) / 6.0f, 0.0f,
+        0.5f / 2.0f, 0.5f * (float)sqrt(3) / 6.0f, 0.0f,
+        0.0f, -0.5f * (float)sqrt(3) / 3.0f, 0.0f
+    };
 
-    if (!renderer)
+    GLuint indices[] = {
+        0, 3, 5,
+        3, 2, 4,
+        5, 3, 1
+    };
+
+    glViewport(0, 0, 800, 600);
+
+    GLuint vertexShader = glCreateShader(GL_VERTEX_SHADER);
+    glShaderSource(vertexShader, 1, &vrtxShdrSrc, NULL);
+    glCompileShader(vertexShader);
+
+    GLuint fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
+    glShaderSource(fragmentShader, 1, &frgmntShdrRsc, NULL);
+    glCompileShader(fragmentShader);
+
+    GLuint shaderProgram = glCreateProgram();
+    glAttachShader(shaderProgram, vertexShader);
+    glAttachShader(shaderProgram, fragmentShader);
+    glLinkProgram(shaderProgram);
+
+    glDeleteShader(vertexShader);
+    glDeleteShader(fragmentShader);
+
+    GLuint VAO, VBO, EBO;
+
+    glGenVertexArrays(1, &VAO);
+    glGenBuffers(1, &VBO);
+    glGenBuffers(1, &EBO);
+
+    glBindVertexArray(VAO);
+
+    glBindBuffer(GL_ARRAY_BUFFER, VBO);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
+
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GLfloat), NULL);
+    glEnableVertexAttribArray(0);
+
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+    glBindVertexArray(0);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+
+    while (!glfwWindowShouldClose(window))
     {
-        fprintf(stderr, "SDL_CreateRenderer Error: %s\n", SDL_GetError());
+        glClearColor(0.07f, 0.13f, 0.17f, 1.0f);
+        glClear(GL_COLOR_BUFFER_BIT);
 
-        SDL_DestroyWindow(window);
-        SDL_Quit();
+        glUseProgram(shaderProgram);
+        glBindVertexArray(VAO);
+        glDrawElements(GL_TRIANGLES, 9, GL_UNSIGNED_INT, 0);
 
-        return 3;
+        glfwSwapBuffers(window);
+
+        glfwPollEvents();
     }
 
-    bool is_running = true;
-    SDL_Event event;
+    glDeleteVertexArrays(1, &VAO);
+    glDeleteBuffers(1, &VBO);
+    glDeleteBuffers(1, &EBO);
+    glDeleteProgram(shaderProgram);
 
-    SDL_FRect rect = { (800 / 2.0f) - (100 / 2.0f), (600 / 2.0f) - (100 / 2.0f), 100, 100 };
-    SDL_Color rectc = { 0, 0, 0, 255 };
-
-    uint64_t last_tick = SDL_GetTicks();
-    float accumulator = 0.0f;
-
-    bool is_changing_color = false;
-
-    char const* filter[] = {"*.lua"};
-
-    while (is_running)
-    {
-        uint64_t current_tick = SDL_GetTicks();
-        float dt = (current_tick - last_tick) / 1000.0f;
-        accumulator += dt;
-
-        while (SDL_PollEvent(&event))
-        {
-            if (event.type == SDL_EVENT_QUIT)
-            {
-                is_running = false;
-            }
-            if (event.type == SDL_EVENT_KEY_DOWN)
-            {
-                if (event.key.key == SDLK_P)
-                {
-                    is_changing_color = !is_changing_color;
-                }
-                if (event.key.key == SDLK_F)
-                {
-                    printf("Will handle this later!\n");
-                }
-            }
-        }
-
-        SDL_SetRenderDrawColor(renderer, 225, 225, 225, 255);
-        SDL_RenderClear(renderer);
-
-        SDL_SetRenderDrawColor(renderer, rectc.r, rectc.g, rectc.b, 255);
-        SDL_RenderFillRect(renderer, &rect);
-
-        if (is_changing_color)
-        {
-            rectc.r += 3;
-            rectc.g += 2;
-            rectc.b += 1;
-
-            rectc.r = rectc.r > 255 ? 0 : rectc.r;
-            rectc.g = rectc.g > 255 ? 0 : rectc.g;
-            rectc.b = rectc.b > 255 ? 0 : rectc.b;
-        }
-
-        SDL_RenderPresent(renderer);
-
-        last_tick = SDL_GetTicks();
-
-        uint64_t duration = last_tick - current_tick;
-
-        if (duration < 1000.0f / 60.0f)
-        {
-            SDL_Delay((1000.0f / 60.0f) - duration);
-        }
-    }
-
-    printf("Time in engine: %.2fs\n", accumulator);
-
-    SDL_DestroyRenderer(renderer);
-    SDL_DestroyWindow(window);
-    SDL_Quit();
+    glfwDestroyWindow(window);
+    glfwTerminate();
 
     return 0;
 }
