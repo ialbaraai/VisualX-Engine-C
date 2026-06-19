@@ -4,7 +4,7 @@
 
 ## Building the Project
 
-In `VisualX Engine/application` director:
+In `VisualX Engine/application` directory:
 
 ```bash
 cmake -S . -B build
