@@ -20,6 +20,8 @@ set(PROJECT_ROOT ${CMAKE_CURRENT_LIST_DIR}/..)
 set(TINYFD_DIR ${PROJECT_ROOT}/lib/tinyfiledialogs)
 set(TINYFD_SRC ${TINYFD_DIR}/tinyfiledialogs.c)
 
+set(STB_DIR ${PROJECT_ROOT}/lib/stb)
+
 set(NUKLEAR_DIR ${PROJECT_ROOT}/lib/nuklear)
 set(LUAJIT_DIR ${PROJECT_ROOT}/lib/luajit)
 set(CGLM_DIR ${PROJECT_ROOT}/lib/cglm)
@@ -60,6 +62,7 @@ target_include_directories(${PROJECT_NAME} PRIVATE
     ${CGLM_DIR}
     ${GLAD_DIR}/include
     ${GLAD_DIR}/src
+    ${STB_DIR}
 )
 
 target_link_libraries(${PROJECT_NAME} PRIVATE
@@ -73,3 +76,10 @@ target_link_libraries(${PROJECT_NAME} PRIVATE
 if(UNIX)
     target_link_libraries(${PROJECT_NAME} PRIVATE dl m)
 endif()
+
+add_custom_command(TARGET engine 
+    POST_BUILD 
+    COMMAND ${CMAKE_COMMAND} -E copy_directory
+    ${PROJECT_ROOT}/assets
+    $<TARGET_FILE_DIR:engine>/assets
+)

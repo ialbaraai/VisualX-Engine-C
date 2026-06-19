@@ -4,6 +4,7 @@
 #include <core.h>
 #include <glad/gl.h>
 #include <GLFW/glfw3.h>
+#include "stb_image.h"
 
 const char* vrtxShdrSrc = "#version 330 core\n"
                            "layout (location = 0) in vec3 aPos;\n"
@@ -38,6 +39,21 @@ int main(void)
     }
 
     glfwMakeContextCurrent(window);
+
+    int iconW, iconH = 0;
+    unsigned char* iconData = stbi_load("assets/vxelogo.png", &iconW, &iconH, NULL, 4);
+
+    if (iconData)
+    {
+        GLFWimage images[1];
+        images[0].width = iconW;
+        images[0].height = iconH;
+        images[0].pixels = iconData;
+
+        glfwSetWindowIcon(window, 1, images);
+
+        stbi_image_free(iconData);
+    }
 
     int version = gladLoadGL(glfwGetProcAddress);
 
