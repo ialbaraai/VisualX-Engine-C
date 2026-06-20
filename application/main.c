@@ -1,7 +1,10 @@
 #include <stdio.h>
 #include <math.h>
 #include <stdbool.h>
+#include <string.h>
+
 #include <core.h>
+
 #include <glad/gl.h>
 #include <GLFW/glfw3.h>
 #include "stb_image.h"
@@ -121,9 +124,13 @@ int main(void)
     glBindVertexArray(0);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 
+    GLfloat scrnBckgrndRed = 0.007f;
+    GLfloat scrnBckgrndGreen = 0.013f;
+    GLfloat scrnBckgrndBlue = 0.017f;
+
     while (!glfwWindowShouldClose(window))
     {
-        glClearColor(0.07f, 0.13f, 0.17f, 1.0f);
+        glClearColor(scrnBckgrndRed, scrnBckgrndGreen, scrnBckgrndBlue, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
 
         glUseProgram(shaderProgram);
@@ -133,6 +140,10 @@ int main(void)
         glfwSwapBuffers(window);
 
         glfwPollEvents();
+
+        scrnBckgrndRed = scrnBckgrndRed + 0.01f > 1.0f ? 0.0f : scrnBckgrndRed + 0.01f;
+        scrnBckgrndGreen = scrnBckgrndGreen + 0.01f > 1.0f ? 0.0f : scrnBckgrndGreen + 0.01f;
+        scrnBckgrndBlue = scrnBckgrndBlue + 0.01f > 1.0f ? 0.0f : scrnBckgrndBlue + 0.01f;
     }
 
     glDeleteVertexArrays(1, &VAO);
@@ -142,6 +153,12 @@ int main(void)
 
     glfwDestroyWindow(window);
     glfwTerminate();
+
+    // core lib test
+    string_t string = {0};
+    core_string_init_data(&string, strlen("Successful deploy!") + 1, "Successful deploy!");
+    printf("%s\n", string.data);
+    core_string_destroy(&string);
 
     return 0;
 }
