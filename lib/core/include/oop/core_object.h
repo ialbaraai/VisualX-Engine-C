@@ -18,7 +18,7 @@ typedef struct CORE_OBJECT_STRUCT
     size_t methods_size;
 } object_t;
 
-int core_object_init(object_t* object, const class_t* base_class, const char* name, const size_t members_size, const size_t methods_size, const member_t* members, const method_t* methods);
+int core_object_init(object_t* object, class_t* base_class, const char* name, const size_t members_size, const size_t methods_size, const member_t* members, const method_t* methods);
 
 int core_object_call(object_t* object, const char* method_name, int argc, void** argv);
 

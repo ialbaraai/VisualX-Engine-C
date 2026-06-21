@@ -80,7 +80,7 @@ int core_string_set(string_t* string, const char* data)
 int core_string_copy(string_t* destination, const string_t* source)
 {
     if (!destination || ! source) return 0;
-    if (!destination->data || source->data) return 0;
+    if (!destination->data || !source->data) return 0;
 
     size_t srclen = source->size;
 
@@ -138,7 +138,7 @@ int core_string_append_char(string_t* string, const char character)
 
     if (string->size + sizeof(char) + 1 > string->capacity)
     {
-        size_t new_capacity = string->capacity * 2 > string->size + sizeof(char) + 1 ? string->capacity : string->size + sizeof(char) + 1;
+        size_t new_capacity = string->capacity * 2 > string->size + sizeof(char) + 1 ? string->capacity * 2 : string->size + sizeof(char) + 1;
 
         if (new_capacity * sizeof(char) > STRING_MAX_SIZE) return 0;
 
@@ -237,7 +237,7 @@ int core_string_input_strict(string_t* string, const size_t maximum)
 
     core_string_set(string, "");
 
-    int curchar = 0;
+    int curchar = getchar();
 
     while (curchar != '\n' && curchar != EOF)
     {
@@ -283,7 +283,7 @@ char core_string_at(const string_t* string, const size_t index)
     if (!string->data) return '\0';
     if (index >= string->size) return '\0';
 
-    return string->data[string->size];
+    return string->data[index];
 }
 int core_string_find(const string_t* string, const char character, size_t* index)
 {
@@ -309,7 +309,7 @@ int core_string_replace_at(string_t* string, const size_t index, const char char
     if (!string->data) return 0;
     if (index >= string->size) return 0;
 
-    string->data[string->size] = character;
+    string->data[index] = character;
     return 1;
 }
 int core_string_replace(string_t* string, const char oldc, const char newc)

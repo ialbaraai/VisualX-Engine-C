@@ -6,7 +6,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-int core_object_init(object_t* object, const class_t* base_class, const char* name, const size_t members_size, const size_t methods_size, const member_t* members, const method_t* methods)
+int core_object_init(object_t* object, class_t* base_class, const char* name, const size_t members_size, const size_t methods_size, const member_t* members, const method_t* methods)
 {
     if (!object) return 0;
     if (object->members || object->methods) return 0;
@@ -20,6 +20,8 @@ int core_object_init(object_t* object, const class_t* base_class, const char* na
     {
         core_string_init_data(&object->name, strlen(name) + 1, name);
     }
+
+    object->class = base_class;
 
     object->members_size = members_size;
     object->members = malloc(members_size * sizeof(member_t));

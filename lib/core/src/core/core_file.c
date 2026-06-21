@@ -3,6 +3,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <errno.h>
 
 int core_file_init(file_t* file, const char* filename, const size_t initial_lines_size, const size_t initial_line_size)
 {
@@ -33,7 +34,11 @@ int core_file_read(file_t* file)
 
     FILE* cfile = fopen(file->filename.data, "r");
 
-    if (!cfile) return 0;
+    if (!cfile)
+    {
+        perror(file->filename.data);
+        return 0;
+    }
 
     core_vector_clear(&file->content);
 
@@ -112,7 +117,7 @@ void core_file_copy_callback(void* destination, const void* source)
         if (core_file_init(&copy, src->filename.data, src->content.size, src->initial_line_size))
         {
             core_vector_copy_callback(&copy.content, &src->content);
-            memcpy(destination, &copy, sizeof(size_t));
+            memcpy(destination, &copy, sizeof(file_t));
         }
     }
 }

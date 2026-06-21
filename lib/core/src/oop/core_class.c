@@ -6,7 +6,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-int core_class_init(class_t* class, const class_t* base_class, const char* name, const size_t static_members_size, const size_t static_methods_size, const member_t* static_members, const method_t* static_methods, int(*constructor)(object_t* object, int argc, void** argv), void(*destructor)(object_t* object))
+int core_class_init(class_t* class, class_t* base_class, const char* name, const size_t static_members_size, const size_t static_methods_size, const member_t* static_members, const method_t* static_methods, int(*constructor)(object_t* object, int argc, void** argv), void(*destructor)(object_t* object))
 {
     if (!class) return 0;
     if (class->static_members || class->static_methods) return 0;
