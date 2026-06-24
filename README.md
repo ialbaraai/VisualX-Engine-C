@@ -9,7 +9,8 @@ In `VisualX Engine/application` directory:
 ```bash
 cmake -S . -B build
 cmake --build build
-./build/engine
+cd build
+./engine
 ```
 
 ---
