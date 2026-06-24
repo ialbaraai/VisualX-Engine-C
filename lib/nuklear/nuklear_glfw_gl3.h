@@ -13,6 +13,8 @@
 #ifndef NK_GLFW_GL3_H_
 #define NK_GLFW_GL3_H_
 
+#include "nuklear.h"
+
 #include <GLFW/glfw3.h>
 
 enum nk_glfw_init_state{

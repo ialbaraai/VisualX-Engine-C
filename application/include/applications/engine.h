@@ -4,6 +4,8 @@
 
 #include <core.h>
 
+#include "../backend/shader.h"
+
 typedef struct VISUALX_ENGINE_STRUCT
 {
     string_t name;
