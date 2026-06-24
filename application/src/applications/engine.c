@@ -37,8 +37,6 @@ int engine_run(engine_t* engine)
 
         glfwTerminate();
 
-        core_class_destroy(&Shader_Class);
-
         return -1;
     }
 
@@ -50,8 +48,6 @@ int engine_run(engine_t* engine)
 
         glfwDestroyWindow(window);
         glfwTerminate();
-
-        core_class_destroy(&Shader_Class);
 
         return -1;
     }
