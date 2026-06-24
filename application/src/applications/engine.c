@@ -20,8 +20,6 @@ void engine_init(engine_t* engine)
 
 int engine_run(engine_t* engine)
 {
-    Shader_Class_Init();
-
     glfwInit();
 
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
@@ -57,6 +55,8 @@ int engine_run(engine_t* engine)
 
         return -1;
     }
+
+    Shader_Class_Init();
 
     glViewport(0, 0, 800, 600);
 
