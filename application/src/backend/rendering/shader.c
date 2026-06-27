@@ -1,8 +1,10 @@
-#include "../../include/backend/shader.h"
+#include "../../../include/backend/rendering/shader.h"
 
 #include <stdio.h>
 #include <stdbool.h>
 #include <string.h>
+
+#include <glad/gl.h>
 
 class_t Shader_Class = {0};
 
@@ -173,4 +175,8 @@ void shader_destructor(object_t* instance)
 void Shader_Class_Init()
 {
     core_class_init(&Shader_Class, NULL, "ShaderClass", 0, 0, NULL, NULL, shader_constructor, shader_destructor);
+}
+void Shader_Class_Destroy()
+{
+    core_class_destroy(&Shader_Class);
 }

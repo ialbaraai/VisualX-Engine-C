@@ -4,7 +4,7 @@
 
 #include <core.h>
 
-#include "../backend/shader.h"
+#include "../backend/rendering/shader.h"
 
 typedef struct VISUALX_ENGINE_STRUCT
 {
