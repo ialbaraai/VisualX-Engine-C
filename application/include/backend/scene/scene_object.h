@@ -9,10 +9,17 @@
 #include <cglm.h>
 
 #include "transform.h"
-#include "../scripting/script.h"
+#include "../../scripting/script.h"
 #include "../rendering/mesh.h"
 
-typedef struct VISUALX_OBJECT_H
+typedef object_t scene_object_t;
+
+extern class_t Scene_Object_Class;
+
+void Scene_Object_Class_Init();
+void Scene_Object_Class_Destroy();
+
+/*typedef struct VISUALX_OBJECT_H
 {
     string_t name;
 
@@ -21,6 +28,6 @@ typedef struct VISUALX_OBJECT_H
 
     object_t shader;
     vector_t scripts;
-} scene_object_t;
+} scene_object_t;*/
 
 #endif

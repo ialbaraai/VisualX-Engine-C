@@ -2,10 +2,17 @@
 
 #define VISUALX_LIGHT_H
 
-#include <core/core_string.h>
+#include <core.h>
 #include <cglm.h>
 
-typedef struct VISUALX_LIGHT_STRUCT
+typedef object_t light_t;
+
+extern class_t Light_Class;
+
+void Light_Class_Init();
+void Light_Class_Destroy();
+
+/*typedef struct VISUALX_LIGHT_STRUCT
 {
     string_t name;
 
@@ -15,6 +22,6 @@ typedef struct VISUALX_LIGHT_STRUCT
     vec3 color;
     
     float intensity;
-} light_t;
+} light_t;*/
 
 #endif

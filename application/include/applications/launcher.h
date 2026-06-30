@@ -3,7 +3,7 @@
 #define VISUALX_LAUNCHER_H
 
 #include <core.h>
-#include "../backend/shader.h"
+#include "../backend/rendering/shader.h"
 
 typedef struct VISUALX_GAME_STRUCT
 {

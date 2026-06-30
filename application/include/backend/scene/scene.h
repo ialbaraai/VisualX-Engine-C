@@ -4,16 +4,11 @@
 
 #include <core.h>
 
-#include "shader.h"
+typedef object_t scene_t;
 
-typedef struct VISUALX_SCENE_STRUCT
-{
-    string_t name;
+extern class_t Scene_Class;
 
-    object_t shader;
-    
-    vector_t scene_objects;
-    vector_t scene_lights;
-} scene_t;
+void Scene_Class_Init();
+void Scene_Class_Destroy();
 
 #endif

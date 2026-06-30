@@ -4,6 +4,8 @@
 
 #include <core.h>
 
+typedef object_t script_t;
+
 extern class_t Script_Class;
 
 void Script_Class_Init();

@@ -26,15 +26,6 @@ void engine_init(engine_t* engine)
 
 int engine_run(engine_t* engine)
 {
-    glfwInit();
-
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
-    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-#ifdef __APPLE__
-    glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
-#endif
-
     GLFWwindow* window = glfwCreateWindow(800, 600, "VisualX Engine", NULL, NULL);
 
     if (!window)
@@ -57,8 +48,6 @@ int engine_run(engine_t* engine)
 
         return -1;
     }
-
-    Shader_Class_Init();
 
     glViewport(0, 0, 800, 600);
 
@@ -130,7 +119,7 @@ int engine_run(engine_t* engine)
 
     stbi_image_free(data);
 
-    object_t shader = {0};
+    shader_t shader = {0};
     Shader_Class.constructor(&shader, 2, (void*[]){"../shaders/vertex.glsl", "../shaders/fragment.glsl"});
 
     while (!glfwWindowShouldClose(window))
@@ -155,16 +144,13 @@ int engine_run(engine_t* engine)
         glfwSwapBuffers(window);
         glfwPollEvents();
     }
-
     Shader_Class.destructor(&shader);
 
     glDeleteBuffers(1, &EBO);
     glDeleteBuffers(1, &VBO);
     glDeleteBuffers(1, &VAO);
 
-    glfwTerminate();
-
-    Shader_Class_Destroy();
+    glfwDestroyWindow(window);
 
     return 0;
 }

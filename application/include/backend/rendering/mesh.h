@@ -2,11 +2,16 @@
 
 #define VISUALX_MESH_H
 
-#include <containers/core_vector.h>
+#include <core.h>
 
-#include <stddef.h>
+typedef object_t mesh_t;
 
-typedef struct VISUALX_MESH_STRUCT
+extern class_t Mesh_Class;
+
+void Mesh_Class_Init();
+void Mesh_Class_Destroy();
+
+/*typedef struct VISUALX_MESH_STRUCT
 {
     vector_t vertices;
     vector_t indices;
@@ -14,6 +19,6 @@ typedef struct VISUALX_MESH_STRUCT
     unsigned int VAO;
     unsigned int VBO;
     unsigned int EBO;
-} mesh_t;
+} mesh_t;*/
 
 #endif

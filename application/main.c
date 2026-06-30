@@ -1,11 +1,8 @@
-#include "include/applications/engine.h"
+#include "include/engine/visualx.h"
 
 int main(void)
 {
-    engine_t engine = {0};
-    engine_init(&engine);
-    engine_run(&engine);
-    engine_destroy(&engine);
+    run();
 
     return 0;
 }

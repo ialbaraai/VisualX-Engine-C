@@ -2,9 +2,13 @@
 
 #define VISUALX_TEXTURE_H
 
-typedef struct VISUALX_TEXTURE_STRUCT
-{
+#include <core.h>
 
-} texture_t;
+typedef object_t texture_t;
+
+extern class_t Texture_Class;
+
+void Texture_Class_Init();
+void Texture_Class_Destroy();
 
 #endif
